@@ -5,5 +5,6 @@ import com.emma.tasks.domain.entities.TasksList;
 
 public interface TaskListMapper {
     TasksList fromDto(TaskListDto taskListDto);
-    TaskListDto toDto(TasksList tasksList);
+
+    TaskListDto toDto(TasksList taskList);
 }

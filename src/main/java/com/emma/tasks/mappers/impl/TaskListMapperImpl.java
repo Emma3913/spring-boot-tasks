@@ -14,52 +14,48 @@ import java.util.Optional;
 @Component
 public class TaskListMapperImpl implements TaskListMapper {
 
-    private final TaskMapper taskMapper;
+        private final TaskMapper taskMapper;
 
-    public TaskListMapperImpl(TaskMapper taskMapper) {
-        this.taskMapper = taskMapper;
-    }
-
-    @Override
-    public TasksList fromDto(TaskListDto taskListDto) {
-        return new TasksList(
-                taskListDto.id(),
-                taskListDto.title(),
-                taskListDto.description(),
-                Optional.ofNullable(taskListDto.tasks())
-                        .map(tasks -> tasks.stream()
-                                .map(taskMapper::fromDto)
-                                .toList()
-                        ).orElse(null),
-                null,
-                null
-        );
-    }
-
-    @Override
-    public TaskListDto toDto(TasksList tasksList) {
-        return new TaskListDto(
-                tasksList.getId(),
-                tasksList.getTitle(),
-                tasksList.getDescription(),
-                Optional.ofNullable(tasksList.getTasks())
-                        .map(List::size)
-                        .orElse(0),
-                calculateTaskListProgress(tasksList.getTasks()),
-                Optional.ofNullable(tasksList.getTasks())
-                        .map(tasks ->
-                                tasks.stream().map(taskMapper::toDto).stream().toList()
-                        ).orElse(null)
-        );
-    }
-
-    private Double calculateTaskListProgress(List<Task> tasks) {
-        if (null == tasks) {
-            return null;
+        public TaskListMapperImpl(TaskMapper taskMapper) {
+                this.taskMapper = taskMapper;
         }
 
-        long closeTaskCount = tasks.stream().filter(task ->
-                TaskStatus.CLOSE == task.getStatus()).count();
-        return (double) closeTaskCount / tasks.size();
-    }
+        @Override
+        public TasksList fromDto(TaskListDto taskListDto) {
+                return new TasksList(
+                                taskListDto.id(),
+                                taskListDto.title(),
+                                taskListDto.description(),
+                                Optional.ofNullable(taskListDto.tasks())
+                                                .map(tasks -> tasks.stream()
+                                                                .map(taskMapper::fromDto)
+                                                                .toList())
+                                                .orElse(null),
+                                null,
+                                null);
+        }
+
+        @Override
+        public TaskListDto toDto(TasksList taskList) {
+                return new TaskListDto(
+                                taskList.getId(),
+                                taskList.getTitle(),
+                                taskList.getDescription(),
+                                Optional.ofNullable(taskList.getTasks())
+                                                .map(List::size)
+                                                .orElse(0),
+                                calculateTaskListProgress(taskList.getTasks()),
+                                Optional.ofNullable(taskList.getTasks())
+                                                .map(tasks -> tasks.stream().map(taskMapper::toDto).toList())
+                                                .orElse(null));
+        }
+
+        private Double calculateTaskListProgress(List<Task> tasks) {
+                if (null == tasks) {
+                        return null;
+                }
+
+                long closeTaskCount = tasks.stream().filter(task -> TaskStatus.CLOSE == task.getStatus()).count();
+                return (double) closeTaskCount / tasks.size();
+        }
 }
