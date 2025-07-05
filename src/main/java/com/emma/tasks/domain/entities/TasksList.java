@@ -21,7 +21,7 @@ public class TasksList {
     @Column(name = "description")
     private String description;
 
-    @OneToMany(mappedBy = "taskList", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
+    @OneToMany(mappedBy = "taskList", cascade = { CascadeType.REMOVE, CascadeType.PERSIST })
     private List<Task> tasks;
 
     @Column(name = "created", nullable = false)
@@ -33,7 +33,8 @@ public class TasksList {
     public TasksList() {
     }
 
-    public TasksList(UUID id, String title, String description, List<Task> tasks, LocalDateTime created, LocalDateTime updated) {
+    public TasksList(UUID id, String title, String description, List<Task> tasks, LocalDateTime created,
+            LocalDateTime updated) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -92,10 +93,14 @@ public class TasksList {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        TasksList tasksList = (TasksList) o;
-        return Objects.equals(id, tasksList.id) && Objects.equals(title, tasksList.title) && Objects.equals(description, tasksList.description) && Objects.equals(tasks, tasksList.tasks) && Objects.equals(created, tasksList.created) && Objects.equals(updated, tasksList.updated);
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        TasksList taskList = (TasksList) o;
+        return Objects.equals(id, taskList.id) && Objects.equals(title, taskList.title)
+                && Objects.equals(description, taskList.description) && Objects.equals(tasks, taskList.tasks)
+                && Objects.equals(created, taskList.created) && Objects.equals(updated, taskList.updated);
     }
 
     @Override
